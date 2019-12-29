@@ -1,0 +1,52 @@
+---
+title: "Homelessness"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = F)
+knitr::opts_chunk$set(warning = F)
+library(dplyr)
+library(readxl)
+library(reshape)
+```
+
+```{r}
+
+#https://www.hudexchange.info/resource/4832/2015-ahar-part-1-pit-estimates-of-homelessness/
+
+xl_ppl = "/Users/christopherton/Documents/Homelessness/2007-2015-PIT-Counts-by-CoC.xlsx"
+xl_bed = "/Users/christopherton/Documents/Homelessness/2007-2015-HIC-Counts-by-CoC.xlsx"
+excel_sheets(path=xl_ppl)
+
+twen15 <- read_excel(xl_ppl,sheet="2015")
+twen14 <- read_excel(xl_ppl,sheet="2014")
+twen13 <- read_excel(xl_ppl,sheet="2013")
+twen12 <- read_excel(xl_ppl,sheet="2012")
+twen11 <- read_excel(xl_ppl,sheet="2011")
+twen10 <- read_excel(xl_ppl,sheet="2010")
+twen09 <- read_excel(xl_ppl,sheet="2009")
+twen08 <- read_excel(xl_ppl,sheet="2008")
+twen07 <- read_excel(xl_ppl,sheet="2007")
+```
+```{r}
+total_year <- data.frame(cbind(twen15$`Total Homeless, 2015`,
+                               twen14$`Total Homeless, 2014`,
+                               twen13$`Total Homeless, 2013`,
+                               twen12$`Total Homeless, 2012`,
+                               twen11$`Total Homeless, 2011`,
+                               twen10$`Total Homeless, 2010`,
+                               twen09$`Total Homeless, 2009`,
+                               twen08$`Total Homeless, 2008`,
+                               twen07$`Total Homeless, 2007`))
+
+```
+
+```{r}
+#split in half,4 and 5
+
+Fst <- total_year[,c(1,2,3,4)]
+Snd <- total_year[,c(5,6,7,8,9)]
+```
+
