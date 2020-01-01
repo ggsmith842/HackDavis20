@@ -30,6 +30,7 @@ twen09 <- read_excel(xl_ppl,sheet="2009")
 twen08 <- read_excel(xl_ppl,sheet="2008")
 twen07 <- read_excel(xl_ppl,sheet="2007")
 ```
+
 ```{r}
 total_year <- data.frame(cbind(twen15$`Total Homeless, 2015`,
                                twen14$`Total Homeless, 2014`,
