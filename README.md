@@ -23,3 +23,12 @@ EIR is the standard we will develop and use to establish the level of impact eac
 
 *User Personalization*
 Each user will be allowed to input different aspects of their travel methods to further personalize the rating system to their lifestyles. For example, upon signing up a user will be given the option to enter the kind of vehicle the user regularly drives.  The EIR will take this into account and a rating for a Tesla may be very different from a rating a F-350 receives. 
+
+
+**Citation**
+Thank you!
+  D. Kahle and H. Wickham. ggmap:
+  Spatial Visualization with ggplot2.
+  The R Journal, 5(1), 144-161. URL
+  http://journal.r-project.org/archive/2013-1/kahle-wickham.pdf
+
