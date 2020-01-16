@@ -1,0 +1,77 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = F)
+knitr::opts_chunk$set(warning = F)
+library(ggplot2)
+library(tidyverse)
+library(plotly)
+#install.packages('devtools')
+#devtools::install_github("michaeldorman/mapsapi")
+#devtools::install_github("dkahle/ggmap")
+library(mapsapi)
+library(ggmap)
+library(maps)
+library(mapproj)
+library(leaflet)
+```
+
+https://www.rdocumentation.org/packages/mapsapi/versions/0.4.2/vignettes/intro.Rmd
+
+```{r}
+api_key = "enter api key here"
+register_google(key = api_key)
+```
+
+```{r}
+
+#queries the Directions API for driving directions from Davis to ....
+
+doc = mp_directions(origin = "UC Davis Pavillion", #from UCD Pav
+                    destination = "Sacramento",
+                    mode = c("driving", "transit", "walking", "bicycling"),
+                    alternatives = FALSE,
+                    waypoints = NULL,
+                    key = paste(api_key))
+
+#given response object, use mp_get_routes to create a spatial layer of route lines
+r = mp_get_routes(doc)
+#print(r)
+
+seg = mp_get_segments(doc)
+print(seg)
+
+#plots coordinates and directions
+pal = colorFactor(palette = sample(colors(), length(unique(seg$segment_id))),
+                  domain = seg$segment_id)
+
+leaflet(seg) %>% 
+  addProviderTiles("CartoDB.DarkMatter") %>%
+  addPolylines(opacity = 1, weight = 7, color = ~pal(seg$segment_id), popup = ~seg$instructions)
+
+
+```
+
+```{r}
+#geocode("UC Davis Pavillion") %>% leaflet() %>% addTiles() %>% addMarkers()
+geocode("UC Davis Pavillion")['lon']
+```
+
+```{r}
+#distance matrix
+locations = c("UC Davis Pavillion","Sacramento")
+dist = mp_matrix(origins= locations, 
+                 destinations = locations,
+                 key = paste(api_key))
+
+m = mp_get_matrix(dist, value = "distance_text") 
+colnames(m) = locations 
+rownames(m) = locations 
+m
+
+```
+
