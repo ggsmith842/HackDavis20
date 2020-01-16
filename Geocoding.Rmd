@@ -59,7 +59,7 @@ Row {data-height=700}
 -----------------------------------------------------------------------
 
 ```{r,include=FALSE,message=FALSE, warning=FALSE}
-api_key = "AIzaSyAnaLkG1iw1J1cTlAR6ZGGhF1bS5C7968Q"
+api_key = "ENTER API KEY HERE"
 register_google(key = api_key)
 ```
 
@@ -126,6 +126,11 @@ Row
 ### Executive Summary
 
 ### Instructional Guide
+
+
+```{r}
+deployApp()
+```
 
 
 
