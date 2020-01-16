@@ -10,14 +10,34 @@ knitr::opts_chunk$set(warning = F)
 library(dplyr)
 library(readxl)
 library(reshape)
+library(usmap)
+library(ggplot2)
+library(shiny)
+library(leaflet)
+library(plotly)
+
 ```
+https://sfgov.org/scorecards/benchmarking/homelessness
+https://www.hudexchange.info/resource/4832/2015-ahar-part-1-pit-estimates-of-homelessness/
+
+https://datalab.usaspending.gov/homelessness-analysis-more.html
+
+
+
+Questions to consider:
+1. predicting outcomes for chronic homelessness
+2. predicting reoccurances
+3. understanding combination of events that led to the predicted outcome
+4. apply an easy-to-understand process to new homeless, regarding their reoccurance risk
+
+
 
 ```{r}
 
 #https://www.hudexchange.info/resource/4832/2015-ahar-part-1-pit-estimates-of-homelessness/
 
-xl_ppl = "/Users/christopherton/Documents/Homelessness/2007-2015-PIT-Counts-by-CoC.xlsx"
-xl_bed = "/Users/christopherton/Documents/Homelessness/2007-2015-HIC-Counts-by-CoC.xlsx"
+xl_ppl = "/Users/christopherton/Documents/HackDavis20/2007-2015-PIT-Counts-by-CoC.xlsx"
+xl_bed = "/Users/christopherton/Documents/HackDavis20/2007-2015-HIC-Counts-by-CoC.xlsx"
 excel_sheets(path=xl_ppl)
 
 twen15 <- read_excel(xl_ppl,sheet="2015")
@@ -44,9 +64,38 @@ total_year <- data.frame(cbind(twen15$`Total Homeless, 2015`,
 ```
 
 ```{r}
+
+states = c("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY")
+
+avg <- numeric()
+
+#2015
+
+```
+
+```{r}
+for (i in 1:length(states)){
+  twen15 %>%
+    filter(grepl(paste(states[i]), `CoC Number`)) %>%
+    avg[i] <- summarise(mean(`Total Homeless, 2015`))
+  print(states[i])
+}
+```
+
+
+
+```{r}
 #split in half,4 and 5
 
 Fst <- total_year[,c(1,2,3,4)]
 Snd <- total_year[,c(5,6,7,8,9)]
+```
+
+## Mapping the U.S. Counties
+```{r}
+plot_usmap(regions="counties")+
+  labs(title= "Homelessness per US Counties",
+       subtitle= "Data by region")+
+  theme(panel.background = element_rect(color="black",fill="lightblue"))
 ```
 
