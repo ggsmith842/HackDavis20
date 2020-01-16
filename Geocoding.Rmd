@@ -1,10 +1,19 @@
 ---
-title: "Untitled"
-output: html_document
+title: "Geocoding from UC Davis Pavillion"
+author: Last updated, `r format(Sys.Date(), "%B %d, %Y")`
+
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    theme: readable
+    social: menu
+    source_code: embed
+runtime: shiny
 ---
 
-```{r}
-knitr::opts_chunk$set(echo = TRUE)
+```{r,inlcude=FALSE,warning=FALSE,message=FALSE, warning=FALSE, r,inlcude=FALSE}
+knitr::opts_chunk$set(echo = T)
 knitr::opts_chunk$set(message = F)
 knitr::opts_chunk$set(warning = F)
 library(ggplot2)
@@ -18,18 +27,49 @@ library(ggmap)
 library(maps)
 library(mapproj)
 library(leaflet)
+library(shiny)
+library(rsconnect)
 ```
 
-https://www.rdocumentation.org/packages/mapsapi/versions/0.4.2/vignettes/intro.Rmd
+Sidebar {.sidebar data-width=200}
+======================================================================
 
-```{r}
-api_key = "enter api key here"
+```{r, echo=FALSE}
+
+# getwd() = "/Users/christopherton/Documents/HackDavis20"
+
+selectInput("origin", "Choose where you would like to start:",
+                choices = c("UCD Pavillion", "Golden 1 Center", "Tahoe City"))
+
+selectInput("destination", "Choose where you would like to end:",
+                choices = c("UCD Pavillion", "Golden 1 Center", "Tahoe City"))
+
+
+ui <- fluidPage(
+  leafletOutput("Explore"),
+  p(),
+  actionButton("recalc", "New place")
+)
+```
+
+Analysis
+============================================================================
+
+Row {data-height=700}
+-----------------------------------------------------------------------
+
+```{r,include=FALSE,message=FALSE, warning=FALSE}
+api_key = "AIzaSyAnaLkG1iw1J1cTlAR6ZGGhF1bS5C7968Q"
 register_google(key = api_key)
 ```
 
-```{r}
+
+### Visualization of Route
+
+```{r,echo=FALSE}
 
 #queries the Directions API for driving directions from Davis to ....
+
 
 doc = mp_directions(origin = "UC Davis Pavillion", #from UCD Pav
                     destination = "Sacramento",
@@ -43,25 +83,27 @@ r = mp_get_routes(doc)
 #print(r)
 
 seg = mp_get_segments(doc)
-print(seg)
+#print(seg)
 
 #plots coordinates and directions
 pal = colorFactor(palette = sample(colors(), length(unique(seg$segment_id))),
                   domain = seg$segment_id)
 
-leaflet(seg) %>% 
+renderLeaflet({
+  leaflet(seg) %>% 
   addProviderTiles("CartoDB.DarkMatter") %>%
-  addPolylines(opacity = 1, weight = 7, color = ~pal(seg$segment_id), popup = ~seg$instructions)
+  addPolylines(opacity = 3, 
+               weight = 7, 
+               color = ~pal(seg$segment_id), 
+               popup = ~seg$instructions)
+})
 
 
 ```
 
-```{r}
-#geocode("UC Davis Pavillion") %>% leaflet() %>% addTiles() %>% addMarkers()
-geocode("UC Davis Pavillion")['lon']
-```
+### Distance Matrix
 
-```{r}
+```{r,echo=FALSE}
 #distance matrix
 locations = c("UC Davis Pavillion","Sacramento")
 dist = mp_matrix(origins= locations, 
@@ -74,4 +116,17 @@ rownames(m) = locations
 m
 
 ```
+
+
+Possible Intervention
+============================================================================
+
+Row
+-----------------------------------------------------------------------
+### Executive Summary
+
+### Instructional Guide
+
+
+
 
