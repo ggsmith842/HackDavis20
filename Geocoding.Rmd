@@ -1,0 +1,137 @@
+---
+title: "Geocoding from UC Davis Pavillion"
+author: Last updated, `r format(Sys.Date(), "%B %d, %Y")`
+
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    theme: readable
+    social: menu
+    source_code: embed
+runtime: shiny
+---
+
+```{r,inlcude=FALSE,warning=FALSE,message=FALSE, warning=FALSE, r,inlcude=FALSE}
+knitr::opts_chunk$set(echo = T)
+knitr::opts_chunk$set(message = F)
+knitr::opts_chunk$set(warning = F)
+library(ggplot2)
+library(tidyverse)
+library(plotly)
+#install.packages('devtools')
+#devtools::install_github("michaeldorman/mapsapi")
+#devtools::install_github("dkahle/ggmap")
+library(mapsapi)
+library(ggmap)
+library(maps)
+library(mapproj)
+library(leaflet)
+library(shiny)
+library(rsconnect)
+```
+
+Sidebar {.sidebar data-width=200}
+======================================================================
+
+```{r, echo=FALSE}
+
+# getwd() = "/Users/christopherton/Documents/HackDavis20"
+
+selectInput("origin", "Choose where you would like to start:",
+                choices = c("UCD Pavillion", "Golden 1 Center", "Tahoe City"))
+
+selectInput("destination", "Choose where you would like to end:",
+                choices = c("UCD Pavillion", "Golden 1 Center", "Tahoe City"))
+
+
+ui <- fluidPage(
+  leafletOutput("Explore"),
+  p(),
+  actionButton("recalc", "New place")
+)
+```
+
+Analysis
+============================================================================
+
+Row {data-height=700}
+-----------------------------------------------------------------------
+
+```{r,include=FALSE,message=FALSE, warning=FALSE}
+api_key = "ENTER API KEY HERE"
+register_google(key = api_key)
+```
+
+
+### Visualization of Route
+
+```{r,echo=FALSE}
+
+#queries the Directions API for driving directions from Davis to ....
+
+
+doc = mp_directions(origin = "UC Davis Pavillion", #from UCD Pav
+                    destination = "Sacramento",
+                    mode = c("driving", "transit", "walking", "bicycling"),
+                    alternatives = FALSE,
+                    waypoints = NULL,
+                    key = paste(api_key))
+
+#given response object, use mp_get_routes to create a spatial layer of route lines
+r = mp_get_routes(doc)
+#print(r)
+
+seg = mp_get_segments(doc)
+#print(seg)
+
+#plots coordinates and directions
+pal = colorFactor(palette = sample(colors(), length(unique(seg$segment_id))),
+                  domain = seg$segment_id)
+
+renderLeaflet({
+  leaflet(seg) %>% 
+  addProviderTiles("CartoDB.DarkMatter") %>%
+  addPolylines(opacity = 3, 
+               weight = 7, 
+               color = ~pal(seg$segment_id), 
+               popup = ~seg$instructions)
+})
+
+
+```
+
+### Distance Matrix
+
+```{r,echo=FALSE}
+#distance matrix
+locations = c("UC Davis Pavillion","Sacramento")
+dist = mp_matrix(origins= locations, 
+                 destinations = locations,
+                 key = paste(api_key))
+
+m = mp_get_matrix(dist, value = "distance_text") 
+colnames(m) = locations 
+rownames(m) = locations 
+m
+
+```
+
+
+Possible Intervention
+============================================================================
+
+Row
+-----------------------------------------------------------------------
+### Executive Summary
+
+### Instructional Guide
+
+
+```{r}
+deployApp()
+```
+
+
+
+
