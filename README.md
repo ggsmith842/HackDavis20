@@ -19,7 +19,11 @@ Features:
 4. 
 
 Logistics(tenative, if you want to do something else just roger up): 
+
 -Chris/Kevin will focus primarily on visualization and python. 
+
 -Grant & Jesus will focus on forecasting and deeper relationships between building features
+
 -Dale will focus on alternative energy costs
+
 -John & Alvin will focus on Weather
