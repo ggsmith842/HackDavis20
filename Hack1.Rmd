@@ -1,0 +1,30 @@
+---
+title: "HAck1"
+author: "Grant Smith"
+date: "1/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+setwd('C:/Users/grant/OneDrive/Documents/GitHub/HackDavis20')
+tupper<-read_csv('tupper_usage_1-18-2020.csv')
+head(tupper)
+```
+```{r}
+setwd('C:/Users/grant/OneDrive/Documents/GitHub/HackDavis20')
+ceed.cost<-read_csv('campus_1-18-2020.csv')
+ceed.cost$`Fiscal Year`
+plot(ts(ceed.cost$`Electricity Cost`))
+ceed.cost
+```
+```
+
+```{r}
+
+```
+

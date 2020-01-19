@@ -1,24 +1,29 @@
 # HackDavis20
 
-Hack Davis 
-2020
+Executive Statement
 
+-We will create a predictive model able to forecast energy needs for each building on UCD campus.
 
-*Executive Summary*
-Develop a predictive model that uses historical & current conditions and population trends to forecast the number of residential spaces needed by a future data. 
+Outcome
 
-*Proposal*
-Our classification system will recommend areas of development that will see substantial increases in demand for housing. By classifying different cities, neighborhoods, etc HUD agencies, construction companies, private investors, and potential home buyers will be given more information to focus improve housing readiness.  
+-The forecasting tool will help in future planning of energy needs and consumption. We belive this will help optomize budget allocation and reduce waste.
 
-*Outcome*
-This system will help prevent future housing shortages as demand increases. Knowing where housing needs will be in the next decade for example will decrease homelessness, lower purchase/rent costs, and account for growing populations and migration trends.
+Features:
 
-*Application*
+1. Forecasting - use ML methods to predict future energy costs and usage  
 
-*Features*
+2. Weather normalization (optomizing energy use using weather as a factor #not climate)
 
+3. Further investigate relationships between building features and energy usage. Does an unknown feature (ie number of floors, building       age)
 
+4. 
 
+Logistics(tenative, if you want to do something else just roger up): 
 
-*What needs to be done?*
+-Chris/Kevin will focus primarily on visualization and python. 
 
+-Grant & Jesus will focus on forecasting and deeper relationships between building features
+
+-Dale will focus on alternative energy costs
+
+-John & Alvin will focus on Weather
